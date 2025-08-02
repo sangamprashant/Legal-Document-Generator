@@ -6,7 +6,7 @@ import { AnalyticsPage, Dashboard, LoginPage, NotFound, SettingPage } from "./pa
 import { CreateCase } from "./pages/(admin)";
 import { CreateCaseUser } from "./pages/(user)";
 import { useAuth } from "./providers/AuthenticationContext";
-import { SearchCase, ViewAllCase } from "./components";
+import { SearchCase, UploadDocuments, ViewAllCase } from "./components";
 
 function App() {
   const { user } = useAuth()
@@ -30,6 +30,7 @@ function App() {
                   <Route path="/cases" element={<ViewAllCase />} />
                 </>
               }
+              <Route path="/documents/upload" element={<UploadDocuments />} />
               <Route path="/cases/search" element={<SearchCase />} />
               <Route path="/settings" element={<SettingPage />} />
               <Route path="/analytics" element={<AnalyticsPage />} />

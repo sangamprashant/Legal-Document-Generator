@@ -31,6 +31,14 @@ const advocateLinks: MainLink[] = [
         ],
     },
     {
+        title: "Documents",
+        icon: <HiOutlineClipboardList size={22} />,
+        subLinks: [
+            { title: "Upload Documents", link: "/documents/upload" },
+            { title: "View Documents", link: "/documents/view" },
+        ],
+    },
+    {
         title: "Templates",
         icon: <LuLayoutTemplate size={23} />,
         subLinks: [
@@ -38,6 +46,7 @@ const advocateLinks: MainLink[] = [
             { title: "All Templates", link: "/templates/all" },
         ],
     },
+
 ];
 
 const userLinks: MainLink[] = [
@@ -49,6 +58,14 @@ const userLinks: MainLink[] = [
             { title: "Search Cases", link: "/cases/search" },
             { title: "My Cases", link: "/cases" },
             { title: "Create Case", link: "/cases/create" },
+        ],
+    },
+    {
+        title: "Documents",
+        icon: <HiOutlineClipboardList size={22} />,
+        subLinks: [
+            { title: "Upload Documents", link: "/documents/upload" },
+            { title: "View Documents", link: "/documents/view" },
         ],
     },
 ];
