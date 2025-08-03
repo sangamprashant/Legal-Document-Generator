@@ -6,6 +6,7 @@ import authRoutes from "./routes/auth.routes";
 import caseRoutes from "./routes/case.routes";
 import documentRoutes from "./routes/document.routes";
 import userRoutes from "./routes/user.routes";
+import  adminRoutes from "./routes/admin.routes";
 
 const app = express();
 
@@ -30,6 +31,8 @@ app.use("/api/auth", authRoutes);
 app.use("/uploads", express.static("uploads"));
 app.use("/api/documents", documentRoutes);
 app.use("/api/cases", caseRoutes);
+
+app.use("/api/role-admin", adminRoutes);
 
 // Health check route
 app.get("/", (_req, res) => {

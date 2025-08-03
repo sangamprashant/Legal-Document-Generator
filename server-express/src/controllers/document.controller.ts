@@ -7,10 +7,17 @@ export const DocumentController = {
       const { user_id, case_id } = req.body;
       const files = req.files as Express.Multer.File[];
 
-      const saved = await DocumentService.uploadDocuments(files, +user_id, +case_id);
-      res.status(200).json({ message: "Documents uploaded", saved });
-    } catch (error:any) {
-      res.status(500).json({ error: error.message });
+      console.log(req.body, files);
+
+      if (!user_id || !case_id || !files || files.length === 0) {
+        return res.status(400).json({ message: "Missing required fields or files." });
+      }
+
+      const saved = await DocumentService.uploadDocuments(files, Number(user_id), Number(case_id));
+      res.status(200).json({ message: "Documents uploaded successfully.", saved });
+    } catch (error: any) {
+      console.error('Upload error:', error);
+      res.status(500).json({ message: error.message || 'Something went wrong during upload.' });
     }
   },
 

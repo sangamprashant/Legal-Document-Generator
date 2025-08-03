@@ -1,46 +1,72 @@
 import React, { useEffect, useState } from 'react';
-import PageHeader from '../banner/PageHeader';
+import { toast } from 'react-toastify';
 import { useAuth } from '../../providers/AuthenticationContext';
-// import axios from 'axios';
+import { server } from '../../utilities';
+import PageHeader from '../banner/PageHeader';
 
 const UploadDocuments = () => {
-    const [files, setFiles] = useState<FileList | null>(null);
+    const [fileInputs, setFileInputs] = useState<File[]>([]);
     const [status, setStatus] = useState('Pending');
     const [caseId, setCaseId] = useState('');
     const [userId, setUserId] = useState('');
-    const { user } = useAuth();
+    const { user, token } = useAuth();
+
+    const handleFileChange = (index: number, file: File | null) => {
+        const updatedFiles = [...fileInputs];
+        if (file) {
+            updatedFiles[index] = file;
+        } else {
+            updatedFiles.splice(index, 1); 
+        }
+        setFileInputs(updatedFiles);
+    };
+
+    const addMoreFiles = () => {
+        setFileInputs([...fileInputs, new File([], '')]);
+    };
 
     const handleUpload = async (e: React.FormEvent) => {
         e.preventDefault();
-        if (!files || !caseId || !userId) {
+        if (!fileInputs.length || !caseId || !userId) {
             alert('Please fill in all required fields.');
             return;
         }
 
         const formData = new FormData();
-        Array.from(files).forEach((file) => formData.append('documents', file));
+        fileInputs.forEach((file) => formData.append('documents', file));
         formData.append('status', status);
         formData.append('case_id', caseId);
-        formData.append('user_id', userId); // You can omit this if your server gets it from token
+        formData.append('user_id', userId);
 
-        // try {
-        //   const response = await axios.post('http://localhost:5000/api/documents/upload', formData);
-        //   alert('Documents uploaded successfully!');
-        //   console.log(response.data);
-        // } catch (error) {
-        //   console.error(error);
-        //   alert('Upload failed.');
-        // }
+        try {
+            const res = await fetch(`${server}/documents/upload`, {
+                method: 'POST',
+                headers: {
+                    authorization: `Bearer ${token}`,
+                    // 'Content-Type': 'multipart/form-data' // Do not set Content-Type for FormData
+                },
+                body: formData,
+            });
+            if (!res.ok) {
+                const errorData = await res.json();
+                throw new Error(errorData.message || 'Failed to upload documents');
+            }
+            const data = await res.json();
+            toast.success('Documents uploaded successfully!');
+            console.log(data);
+            console.log(res);
+        } catch (error) {
+            toast.error(error instanceof Error ? error.message : 'An error occurred while uploading documents.');
+        }
+
     };
 
     useEffect(() => {
-
         if (user?.role === "user") {
             setUserId(user.id as string);
             setStatus("Pending");
         }
-
-    }, [user])
+    }, [user]);
 
     return (
         <>
@@ -58,7 +84,7 @@ const UploadDocuments = () => {
                         />
                     </div>
 
-                    {user?.role !== "user" &&
+                    {user?.role !== "user" && (
                         <>
                             <div>
                                 <label className="block mb-1">User ID</label>
@@ -84,17 +110,25 @@ const UploadDocuments = () => {
                                 </select>
                             </div>
                         </>
-                    }
+                    )}
 
                     <div>
-                        <label className="block mb-1">Select Documents</label>
-                        <input
-                            type="file"
-                            multiple
-                            onChange={(e) => setFiles(e.target.files)}
-                            className="w-full"
-                            required
-                        />
+                        <label className="block mb-2">Upload Documents</label>
+                        {fileInputs.map((_, index) => (
+                            <input
+                                key={index}
+                                type="file"
+                                onChange={(e) => handleFileChange(index, e.target.files?.[0] || null)}
+                                className="w-full border px-3 py-2 rounded mb-2"
+                            />
+                        ))}
+                        <button
+                            type="button"
+                            onClick={addMoreFiles}
+                            className="bg-gray-300 text-sm px-3 py-1 rounded hover:bg-gray-400"
+                        >
+                            + Add More
+                        </button>
                     </div>
 
                     <button

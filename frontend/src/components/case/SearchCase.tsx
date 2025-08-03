@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useAuth } from '../../providers/AuthenticationContext';
 import PageHeader from '../banner/PageHeader';
+import CaseIDHandle from './CaseIDHandle';
 
 const SearchCase = () => {
     const { user } = useAuth();
@@ -10,14 +11,17 @@ const SearchCase = () => {
         id: '',
     });
 
+    const [searchKey, setSearchKey] = useState('');
+
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
         const { name, value } = e.target;
         setSearchFields(prev => ({ ...prev, [name]: value }));
+        setSearchKey("")
     };
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
-        console.log('Searching for:', searchFields);
+        setSearchKey(searchFields.id);
     };
 
     return (
@@ -47,6 +51,10 @@ const SearchCase = () => {
                     Search
                 </button>
             </form>
+
+            {searchKey ? <CaseIDHandle id={searchKey} /> : <>
+                <p className="text-center text-gray-500">Please enter a case ID to search.</p>
+            </>}
         </>
     );
 };

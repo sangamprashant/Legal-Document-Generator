@@ -3,6 +3,7 @@ import { useAuth } from '../../providers/AuthenticationContext';
 import { apiRequest } from '../../utilities/apiRequest';
 import { CaseStatus, STATUS_COLOR_MAP } from '../../utilities/case';
 import PageHeader from '../banner/PageHeader';
+import { Link } from 'react-router-dom';
 
 type CaseType = {
     case_id: number;
@@ -60,6 +61,7 @@ const ViewAllCase = () => {
                                     <th className="border px-4 py-2 text-left">Case To</th>
                                     <th className="border px-4 py-2 text-left">Description</th>
                                     <th className="border px-4 py-2 text-left">Status</th>
+                                    <th className="border px-4 py-2 text-left">Action</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -71,6 +73,10 @@ const ViewAllCase = () => {
                                         <td className="border px-4 py-2">{c.case_to}</td>
                                         <td className="border px-4 py-2">{c.description}</td>
                                         <td className={`border px-4 py-2 text-center font-medium ${STATUS_COLOR_MAP[c.status as CaseStatus]}`}>{c.status}</td>
+                                        <td className="border px-4 py-2 gap-1 flex flex-wrap">
+                                            <Link to={`./${c.case_id}`} className='bg-indigo-900 hover:bg-indigo-950 text-white p-2 rounded shadow-2xl'>View</Link>
+                                            <button className='bg-red-900 hover:bg-red-950 text-white p-2 rounded shadow-2xl'>Delete</button>
+                                        </td>
                                     </tr>
                                 ))}
                             </tbody>

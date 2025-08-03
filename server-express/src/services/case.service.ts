@@ -1,3 +1,4 @@
+import { AdminRepository } from "../repositories/admin.repository";
 import { CaseRepository } from "../repositories/case.repository";
 
 export const CaseService = {
@@ -31,5 +32,19 @@ export const CaseService = {
   advocateGetsAllCases: async () => {
     const cases = await CaseRepository.advocateGetsAllCases();
     return cases;
+  },
+
+  getCaseData: async (
+    role: "advocate" | "user",
+    userId: number,
+    caseId: number
+  ) => {
+    if (role === "advocate") {
+      return await AdminRepository.getCaseDetailsById(caseId as number);
+    } else if (role === "user") {
+      return await AdminRepository.getCaseByUserIdAndCaseId(userId, caseId);
+    } else {
+      throw new Error("Invalid role");
+    }
   },
 };

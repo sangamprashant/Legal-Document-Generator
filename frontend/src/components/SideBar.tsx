@@ -52,7 +52,7 @@ const advocateLinks: MainLink[] = [
 const userLinks: MainLink[] = [
     { title: "Dashboard", link: "/dashboard", icon: <HiOutlineViewGrid size={22} /> },
     {
-        title: "File a Case",
+        title: "Cases",
         icon: <HiOutlineClipboardList size={22} />,
         subLinks: [
             { title: "Search Cases", link: "/cases/search" },
@@ -60,14 +60,7 @@ const userLinks: MainLink[] = [
             { title: "Create Case", link: "/cases/create" },
         ],
     },
-    {
-        title: "Documents",
-        icon: <HiOutlineClipboardList size={22} />,
-        subLinks: [
-            { title: "Upload Documents", link: "/documents/upload" },
-            { title: "View Documents", link: "/documents/view" },
-        ],
-    },
+    { title: "Upload Documents", icon: <HiOutlineClipboardList size={22} />, link: "/documents/upload" },
 ];
 
 const Dashboard = ({ children }: SideBarProps) => {

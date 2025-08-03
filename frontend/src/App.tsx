@@ -7,6 +7,7 @@ import { CreateCase } from "./pages/(admin)";
 import { CreateCaseUser } from "./pages/(user)";
 import { useAuth } from "./providers/AuthenticationContext";
 import { SearchCase, UploadDocuments, ViewAllCase } from "./components";
+import CasePage from "./components/case/CasePage";
 
 function App() {
   const { user } = useAuth()
@@ -23,11 +24,13 @@ function App() {
                 <>
                   <Route path="/cases/create" element={<CreateCase />} />
                   <Route path="/cases/history" element={<ViewAllCase />} />
+                  <Route path="/cases/history/:id" element={<CasePage />} />
                 </>
                 :
                 <>
                   <Route path="/cases/create" element={<CreateCaseUser />} />
                   <Route path="/cases" element={<ViewAllCase />} />
+                  <Route path="/cases/:id" element={<CasePage />} />
                 </>
               }
               <Route path="/documents/upload" element={<UploadDocuments />} />

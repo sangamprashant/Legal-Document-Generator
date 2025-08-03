@@ -17,7 +17,7 @@ export const CaseController = {
       );
       res.status(201).json(result);
     } catch (err) {
-      res.status(500).json({ error: "Failed to create case", details: err });
+      res.status(500).json({ message: "Failed to create case", details: err });
     }
   },
 
@@ -47,7 +47,7 @@ export const CaseController = {
       const result = await CaseService.getUserCases(userId);
       res.json(result);
     } catch (err) {
-      res.status(500).json({ error: "Failed to fetch cases", details: err });
+      res.status(500).json({ message: "Failed to fetch cases", details: err });
     }
   },
 
@@ -57,8 +57,25 @@ export const CaseController = {
       const result = await CaseService.getCaseDetails(caseId);
       res.json(result);
     } catch (err) {
-      res.status(500).json({ error: "Failed to fetch case", details: err });
+      res.status(500).json({ message: "Failed to fetch case", details: err });
     }
   },
-  
+
+  getCaseData: async (req: AuthenticatedRequest, res: Response) => {
+    try {
+      if (!req.user || !req.params.caseId) {
+        throw new Error("User or caseId not provided");
+      }
+      const result = await CaseService.getCaseData(
+        req.user?.role as "advocate" | "user",
+        req.user?.id,
+        Number(req.params.caseId)
+      );
+      res.status(200).json(result[0]);
+    } catch (error) {
+      res
+        .status(500)
+        .json({ message: "Failed to fetch case data", details: error });
+    }
+  },
 };
