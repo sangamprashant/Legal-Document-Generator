@@ -4,7 +4,7 @@ type AdminCaseData = {
 
 type CaseDetail = {
   case_id: number;
-  case_status: string;
+  case_status: CaseStatus;
   case_from: string;
   case_to: string;
   description: string;

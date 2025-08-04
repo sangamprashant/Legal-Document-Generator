@@ -1,8 +1,6 @@
-import { useAuth } from "../../providers/AuthenticationContext";
 import Stats from "./dashboard/Stats";
 
 const Dashboard = () => {
-    const { user } = useAuth()
     return (
         <div className="p-4">
             <div className="max-w-7xl mx-auto">
@@ -15,7 +13,6 @@ const Dashboard = () => {
                 </div>
 
                 <Stats />
-                {JSON.stringify(user, null, 2)}
             </div>
         </div>
     );

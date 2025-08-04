@@ -47,4 +47,12 @@ export const CaseService = {
       throw new Error("Invalid role");
     }
   },
+
+  updateCaseStatus: async (caseId: number, status: string) => {
+    const result = await CaseRepository.updateStatus(caseId, status);
+    if (result.affectedRows === 0) {
+      throw new Error("Case not found or status update failed");
+    }
+    return { message: "Case status updated successfully" };
+  },
 };

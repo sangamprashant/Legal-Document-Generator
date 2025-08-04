@@ -9,5 +9,6 @@ router.get("/", authenticate, CaseController.getAllCases);
 router.get("/user/:userId", CaseController.getCasesByUser);
 router.get("/:caseId", CaseController.getCaseById);
 router.get("/case-data/:caseId", authenticate, CaseController.getCaseData);
+router.put("/status/:caseId", authenticate, CaseController.updateCaseStatus);
 
 export default router;

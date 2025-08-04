@@ -35,7 +35,6 @@ const advocateLinks: MainLink[] = [
         icon: <HiOutlineClipboardList size={22} />,
         subLinks: [
             { title: "Upload Documents", link: "/documents/upload" },
-            { title: "View Documents", link: "/documents/view" },
         ],
     },
     {

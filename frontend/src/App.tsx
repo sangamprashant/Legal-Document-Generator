@@ -1,13 +1,13 @@
 import { Route, Routes } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
+import { SearchCase, UploadDocuments, ViewAllCase } from "./components";
+import CasePage from "./components/case/CasePage";
 import SideBar from "./components/SideBar";
-import { AnalyticsPage, Dashboard, LoginPage, NotFound, SettingPage } from "./pages";
+import { Dashboard, LoginPage, NotFound, SettingPage } from "./pages";
 import { CreateCase } from "./pages/(admin)";
 import { CreateCaseUser } from "./pages/(user)";
 import { useAuth } from "./providers/AuthenticationContext";
-import { SearchCase, UploadDocuments, ViewAllCase } from "./components";
-import CasePage from "./components/case/CasePage";
 
 function App() {
   const { user } = useAuth()
@@ -36,7 +36,6 @@ function App() {
               <Route path="/documents/upload" element={<UploadDocuments />} />
               <Route path="/cases/search" element={<SearchCase />} />
               <Route path="/settings" element={<SettingPage />} />
-              <Route path="/analytics" element={<AnalyticsPage />} />
               <Route path="*" element={<NotFound />} />
             </>
           </Routes>

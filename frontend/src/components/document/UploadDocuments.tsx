@@ -3,9 +3,11 @@ import { toast } from 'react-toastify';
 import { useAuth } from '../../providers/AuthenticationContext';
 import { server } from '../../utilities';
 import PageHeader from '../banner/PageHeader';
+import { documentTypesWithCategory } from '../../utilities/documentType';
 
 const UploadDocuments = () => {
     const [fileInputs, setFileInputs] = useState<File[]>([]);
+    const [docTypes, setDocTypes] = useState<string[]>([]);
     const [status, setStatus] = useState('Pending');
     const [caseId, setCaseId] = useState('');
     const [userId, setUserId] = useState('');
@@ -16,13 +18,20 @@ const UploadDocuments = () => {
         if (file) {
             updatedFiles[index] = file;
         } else {
-            updatedFiles.splice(index, 1); 
+            updatedFiles.splice(index, 1);
         }
         setFileInputs(updatedFiles);
     };
 
+    const handleDocTypeChange = (index: number, value: string) => {
+        const updated = [...docTypes];
+        updated[index] = value;
+        setDocTypes(updated);
+    };
+
     const addMoreFiles = () => {
         setFileInputs([...fileInputs, new File([], '')]);
+        setDocTypes([...docTypes, '']);
     };
 
     const handleUpload = async (e: React.FormEvent) => {
@@ -33,7 +42,10 @@ const UploadDocuments = () => {
         }
 
         const formData = new FormData();
-        fileInputs.forEach((file) => formData.append('documents', file));
+        fileInputs.forEach((file, index) => {
+            formData.append('documents', file);
+            formData.append('types', docTypes[index]);
+        });
         formData.append('status', status);
         formData.append('case_id', caseId);
         formData.append('user_id', userId);
@@ -43,7 +55,6 @@ const UploadDocuments = () => {
                 method: 'POST',
                 headers: {
                     authorization: `Bearer ${token}`,
-                    // 'Content-Type': 'multipart/form-data' // Do not set Content-Type for FormData
                 },
                 body: formData,
             });
@@ -112,16 +123,42 @@ const UploadDocuments = () => {
                         </>
                     )}
 
+                    <div className="grid grid-cols-2 gap-2">
+                        <div>
+                            <label className="block mb-2">Upload Documents</label>
+                            {fileInputs.map((_, index) => (
+                                <input
+                                    key={index}
+                                    type="file"
+                                    onChange={(e) => handleFileChange(index, e.target.files?.[0] || null)}
+                                    className="w-full border px-3 py-2 rounded mb-2"
+                                />
+                            ))}
+                        </div>
+
+                        <div>
+                            <label className='block mb-2'>Document Type</label>
+                            {fileInputs.map((_, index) => (
+                                <select
+                                    name="type"
+                                    key={index}
+                                    value={docTypes[index] || ''}
+                                    onChange={(e) => handleDocTypeChange(index, e.target.value)}
+                                    className="w-full border px-3 py-2 rounded mb-2"
+                                    required
+                                >
+                                    <option value="" disabled>-- Please select an option --</option>
+                                    {documentTypesWithCategory.map((d, i) => (
+                                        <option value={d.label} key={i}>
+                                            {d.label} - {d.category}
+                                        </option>
+                                    ))}
+                                </select>
+                            ))}
+                        </div>
+
+                    </div>
                     <div>
-                        <label className="block mb-2">Upload Documents</label>
-                        {fileInputs.map((_, index) => (
-                            <input
-                                key={index}
-                                type="file"
-                                onChange={(e) => handleFileChange(index, e.target.files?.[0] || null)}
-                                className="w-full border px-3 py-2 rounded mb-2"
-                            />
-                        ))}
                         <button
                             type="button"
                             onClick={addMoreFiles}

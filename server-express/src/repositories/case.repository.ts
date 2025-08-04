@@ -54,4 +54,17 @@ export const CaseRepository = {
       });
     });
   },
+
+  updateStatus: (caseId: number, status: string): Promise<any> => {
+    return new Promise((resolve, reject) => {
+      db.query(
+        "UPDATE cases SET status = ? WHERE case_id = ?",
+        [status, caseId],
+        (err, results) => {
+          if (err) return reject(err);
+          resolve(results);
+        }
+      );
+    });
+  },
 };

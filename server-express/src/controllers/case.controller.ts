@@ -78,4 +78,20 @@ export const CaseController = {
         .json({ message: "Failed to fetch case data", details: error });
     }
   },
+
+  updateCaseStatus: async (req: AuthenticatedRequest, res: Response) => {
+    const caseId = Number(req.params.caseId);
+    const { status } = req.body;
+
+    try {
+      if (!req.user || req.user.role !== Role.ADVOCATE) {
+        return res.status(403).json({ message: "Forbidden" });
+      }
+
+      const result = await CaseService.updateCaseStatus(caseId, status);
+      res.status(200).json({ message: "Case status updated successfully", result });
+    } catch (err) {
+      res.status(500).json({ message: "Failed to update case status", details: err });
+    }
+  },
 };

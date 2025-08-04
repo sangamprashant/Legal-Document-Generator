@@ -44,5 +44,14 @@ export const DocumentRepository = {
       ]
     );
     return result;
+  },
+
+  async updtateStatusByDocId(doc_id: number, status: string) {
+    const [result] = await db.promise().execute(
+      `UPDATE documents SET status = ? WHERE doc_id = ?`,
+      [status, doc_id]
+    );
+    return result;
   }
+
 };
