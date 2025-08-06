@@ -1,27 +1,23 @@
-# filename: main.py
-from fastapi import FastAPI, Request
-from pydantic import BaseModel
+from flask import Flask, request, jsonify
 from transformers import GPT2Tokenizer, GPT2LMHeadModel
 import torch
 
-app = FastAPI()
+app = Flask(__name__)
 
 # Load model and tokenizer
 tokenizer = GPT2Tokenizer.from_pretrained("gpt2")
 model = GPT2LMHeadModel.from_pretrained("gpt2")
 model.eval()
 
-class DescriptionRequest(BaseModel):
-    description: str
+@app.route("/generate", methods=["POST"])
+def generate_legal_document():
+    data = request.get_json()
+    description = data.get("description", "").strip()
 
-@app.post("/generate")
-async def generate_legal_document(data: DescriptionRequest):
-    description = data.description
-    if not description.strip():
-        return {"result": "⚠️ Please enter a brief description."}
+    if not description:
+        return jsonify({"result": "⚠️ Please enter a brief description."})
 
     prompt = f"This legal document is an agreement for the following matter: {description}. The terms and conditions are as follows:\n"
-
     input_ids = tokenizer.encode(prompt, return_tensors='pt')
 
     with torch.no_grad():
@@ -37,4 +33,7 @@ async def generate_legal_document(data: DescriptionRequest):
         )
 
     result = tokenizer.decode(output[0], skip_special_tokens=True)
-    return {"result": result}
+    return jsonify({"result": result})
+
+if __name__ == "__main__":
+    app.run(debug=True, port=8000)

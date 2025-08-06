@@ -1,0 +1,87 @@
+[
+    {
+        "label": "Flask",
+        "importPath": "flask",
+        "description": "flask",
+        "isExtraImport": true,
+        "detail": "flask",
+        "documentation": {}
+    },
+    {
+        "label": "request",
+        "importPath": "flask",
+        "description": "flask",
+        "isExtraImport": true,
+        "detail": "flask",
+        "documentation": {}
+    },
+    {
+        "label": "jsonify",
+        "importPath": "flask",
+        "description": "flask",
+        "isExtraImport": true,
+        "detail": "flask",
+        "documentation": {}
+    },
+    {
+        "label": "GPT2Tokenizer",
+        "importPath": "transformers",
+        "description": "transformers",
+        "isExtraImport": true,
+        "detail": "transformers",
+        "documentation": {}
+    },
+    {
+        "label": "GPT2LMHeadModel",
+        "importPath": "transformers",
+        "description": "transformers",
+        "isExtraImport": true,
+        "detail": "transformers",
+        "documentation": {}
+    },
+    {
+        "label": "torch",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "torch",
+        "description": "torch",
+        "detail": "torch",
+        "documentation": {}
+    },
+    {
+        "label": "generate_legal_document",
+        "kind": 2,
+        "importPath": "main",
+        "description": "main",
+        "peekOfCode": "def generate_legal_document():\n    data = request.get_json()\n    description = data.get(\"description\", \"\").strip()\n    if not description:\n        return jsonify({\"result\": \"⚠️ Please enter a brief description.\"})\n    prompt = f\"This legal document is an agreement for the following matter: {description}. The terms and conditions are as follows:\\n\"\n    input_ids = tokenizer.encode(prompt, return_tensors='pt')\n    with torch.no_grad():\n        output = model.generate(\n            input_ids,",
+        "detail": "main",
+        "documentation": {}
+    },
+    {
+        "label": "app",
+        "kind": 5,
+        "importPath": "main",
+        "description": "main",
+        "peekOfCode": "app = Flask(__name__)\n# Load model and tokenizer\ntokenizer = GPT2Tokenizer.from_pretrained(\"gpt2\")\nmodel = GPT2LMHeadModel.from_pretrained(\"gpt2\")\nmodel.eval()\n@app.route(\"/generate\", methods=[\"POST\"])\ndef generate_legal_document():\n    data = request.get_json()\n    description = data.get(\"description\", \"\").strip()\n    if not description:",
+        "detail": "main",
+        "documentation": {}
+    },
+    {
+        "label": "tokenizer",
+        "kind": 5,
+        "importPath": "main",
+        "description": "main",
+        "peekOfCode": "tokenizer = GPT2Tokenizer.from_pretrained(\"gpt2\")\nmodel = GPT2LMHeadModel.from_pretrained(\"gpt2\")\nmodel.eval()\n@app.route(\"/generate\", methods=[\"POST\"])\ndef generate_legal_document():\n    data = request.get_json()\n    description = data.get(\"description\", \"\").strip()\n    if not description:\n        return jsonify({\"result\": \"⚠️ Please enter a brief description.\"})\n    prompt = f\"This legal document is an agreement for the following matter: {description}. The terms and conditions are as follows:\\n\"",
+        "detail": "main",
+        "documentation": {}
+    },
+    {
+        "label": "model",
+        "kind": 5,
+        "importPath": "main",
+        "description": "main",
+        "peekOfCode": "model = GPT2LMHeadModel.from_pretrained(\"gpt2\")\nmodel.eval()\n@app.route(\"/generate\", methods=[\"POST\"])\ndef generate_legal_document():\n    data = request.get_json()\n    description = data.get(\"description\", \"\").strip()\n    if not description:\n        return jsonify({\"result\": \"⚠️ Please enter a brief description.\"})\n    prompt = f\"This legal document is an agreement for the following matter: {description}. The terms and conditions are as follows:\\n\"\n    input_ids = tokenizer.encode(prompt, return_tensors='pt')",
+        "detail": "main",
+        "documentation": {}
+    }
+]

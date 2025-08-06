@@ -11,6 +11,7 @@ import {
     FaQuestionCircle,
 } from "react-icons/fa";
 import { CASE_STATUS, CaseStatus } from "../../utilities/case";
+import { Link } from "react-router-dom";
 
 const CaseIDHandle = ({ id }: { id: string }) => {
     const [caseData, setCaseData] = useState<CaseDetail | null>(null);
@@ -58,7 +59,14 @@ const CaseIDHandle = ({ id }: { id: string }) => {
             </div>
 
             <div className="bg-white rounded-xl shadow p-5 border border-gray-100">
-                <h3 className="text-lg font-semibold text-gray-700 mb-4">📄 Documents</h3>
+                <div className="flex justify-between items-center">
+                    <h3 className="text-lg font-semibold text-gray-700 mb-4">Documents</h3>
+                    <div className="flex items-center gap-2 text-gray-500">
+                        <Link to={`/documents/upload?case_id=${caseData.case_id}`} className="text-blue-600 hover:underline">
+                            <FaFileAlt className="inline-block" /> Upload Document
+                        </Link>
+                    </div>
+                </div>
                 {caseData.documents.length === 0 ? (
                     <p className="text-gray-500">No documents available.</p>
                 ) : (
