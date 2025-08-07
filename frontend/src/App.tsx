@@ -8,6 +8,7 @@ import { Dashboard, LoginPage, NotFound, SettingPage } from "./pages";
 import { CreateCase } from "./pages/(admin)";
 import { CreateCaseUser } from "./pages/(user)";
 import { useAuth } from "./providers/AuthenticationContext";
+import { CreateTemplatePage } from "./pages/(admin)/template";
 
 function App() {
   const { user } = useAuth()
@@ -34,6 +35,7 @@ function App() {
                 </>
               }
               <Route path="/documents/upload" element={<UploadDocuments />} />
+              <Route path="/documents/generate" element={<CreateTemplatePage />} />
               <Route path="/cases/search" element={<SearchCase />} />
               <Route path="/settings" element={<SettingPage />} />
               <Route path="*" element={<NotFound />} />

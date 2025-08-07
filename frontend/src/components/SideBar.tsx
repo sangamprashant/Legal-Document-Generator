@@ -1,12 +1,12 @@
 import React, { useState } from "react";
+import { FaChevronDown } from "react-icons/fa";
+import { GoLaw } from "react-icons/go";
 import {
     HiOutlineClipboardList,
     HiOutlineViewGrid, HiX
 } from "react-icons/hi";
 import { PiUserCircleGearLight } from "react-icons/pi";
 import { TbLogout2 } from "react-icons/tb";
-import { FaChevronDown } from "react-icons/fa";
-import { LuLayoutTemplate } from "react-icons/lu";
 import { Link } from "react-router-dom";
 import { useAuth } from "../providers/AuthenticationContext";
 import { useSidebar } from "../providers/SidebarContext";
@@ -14,6 +14,7 @@ import Logo from "./sidebar/Logo";
 import SideLinks from "./sidebar/SideLinks";
 import Title from "./sidebar/Title";
 import Topbar from "./sidebar/Topbar";
+
 
 interface SideBarProps {
     children: React.ReactNode;
@@ -23,7 +24,7 @@ const advocateLinks: MainLink[] = [
     { title: "Dashboard", link: "/dashboard", icon: <HiOutlineViewGrid size={22} /> },
     {
         title: "Cases",
-        icon: <HiOutlineClipboardList size={22} />,
+        icon: <GoLaw size={22} />,
         subLinks: [
             { title: "Create Case", link: "/cases/create" },
             { title: "Search Cases", link: "/cases/search" },
@@ -34,32 +35,30 @@ const advocateLinks: MainLink[] = [
         title: "Documents",
         icon: <HiOutlineClipboardList size={22} />,
         subLinks: [
-            { title: "Upload Documents", link: "/documents/upload" },
+            { title: "Upload a Documents", link: "/documents/upload" },
+            { title: "Generate a Document", link: "/documents/generate" },
         ],
     },
-    {
-        title: "Templates",
-        icon: <LuLayoutTemplate size={23} />,
-        subLinks: [
-            { title: "Create a Template", link: "/templates/create" },
-            { title: "All Templates", link: "/templates/all" },
-        ],
-    },
-
 ];
 
 const userLinks: MainLink[] = [
     { title: "Dashboard", link: "/dashboard", icon: <HiOutlineViewGrid size={22} /> },
     {
         title: "Cases",
-        icon: <HiOutlineClipboardList size={22} />,
+        icon: <GoLaw size={22} />,
         subLinks: [
             { title: "Search Cases", link: "/cases/search" },
             { title: "My Cases", link: "/cases" },
             { title: "Create Case", link: "/cases/create" },
         ],
     },
-    { title: "Upload Documents", icon: <HiOutlineClipboardList size={22} />, link: "/documents/upload" },
+    {
+        title: "Documents", icon: <HiOutlineClipboardList size={22} />,
+        subLinks: [
+            { title: "Upload Documents", link: "/documents/upload" },
+            { title: "Generate a Document", link: "/documents/generate" },
+        ],
+    },
 ];
 
 const Dashboard = ({ children }: SideBarProps) => {

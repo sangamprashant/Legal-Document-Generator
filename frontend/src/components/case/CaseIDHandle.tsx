@@ -11,13 +11,18 @@ import {
     FaQuestionCircle,
 } from "react-icons/fa";
 import { CASE_STATUS, CaseStatus } from "../../utilities/case";
+import { RiAiGenerateText } from "react-icons/ri";
+import { IoCloudUploadOutline } from "react-icons/io5";
+import { RxDividerVertical } from "react-icons/rx";
+
+
 import { Link } from "react-router-dom";
 
 const CaseIDHandle = ({ id }: { id: string }) => {
     const [caseData, setCaseData] = useState<CaseDetail | null>(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState("");
-    const { token } = useAuth();
+    const { token, user } = useAuth();
 
     useEffect(() => {
         const fetchCaseDetails = async () => {
@@ -62,9 +67,14 @@ const CaseIDHandle = ({ id }: { id: string }) => {
                 <div className="flex justify-between items-center">
                     <h3 className="text-lg font-semibold text-gray-700 mb-4">Documents</h3>
                     <div className="flex items-center gap-2 text-gray-500">
-                        <Link to={`/documents/upload?case_id=${caseData.case_id}`} className="text-blue-600 hover:underline">
-                            <FaFileAlt className="inline-block" /> Upload Document
+                        <Link to={`/documents/generate?case_id=${caseData.case_id}`} className="text-blue-600 flex items-center gap-1">
+                            <RiAiGenerateText className="inline-block" /><span className="hidden md:block">Generate Document</span>
                         </Link>
+                        <RxDividerVertical fontSize={30} className="text-blue-500" />
+                        <Link to={`/documents/upload?case_id=${caseData.case_id}${user?.role === "advocate" ? `&user_id=${caseData.user.user_id}` : ""} `} className="text-blue-600 flex items-center gap-1">
+                            <IoCloudUploadOutline className="inline-block" /> <span className="hidden md:block">Upload Document</span>
+                        </Link>
+
                     </div>
                 </div>
                 {caseData.documents.length === 0 ? (
@@ -84,7 +94,7 @@ const CaseIDHandle = ({ id }: { id: string }) => {
 export default CaseIDHandle;
 
 const UserData = ({ caseData }: { caseData: CaseDetail }) => {
-    const { token } = useAuth();
+    const { token, user } = useAuth();
     const [cs, setCase] = useState<CaseDetail>(caseData);
     const [status, setStatus] = useState<CaseStatus>(cs.case_status);
 
@@ -115,9 +125,9 @@ const UserData = ({ caseData }: { caseData: CaseDetail }) => {
         <div className="bg-white rounded-xl shadow p-5 border border-gray-100 space-y-2">
             <div className="flex justify-between items-center">
                 <h3 className="text-lg font-semibold text-gray-700 mb-2">📌 Case Details</h3>
-                <select value={cs.case_status} onChange={(e) => setStatus(e.target.value as CaseStatus)}>
+                {user?.role === "advocate" && <select value={cs.case_status} onChange={(e) => setStatus(e.target.value as CaseStatus)}>
                     {CASE_STATUS.map((c, i) => (<option key={i} value={c}>{c}</option>))}
-                </select>
+                </select>}
             </div>
             <p><strong>Status:</strong> {cs.case_status}</p>
             <p><strong>From:</strong> {cs.case_from}</p>

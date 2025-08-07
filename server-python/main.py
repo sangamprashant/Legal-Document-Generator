@@ -9,6 +9,11 @@ tokenizer = GPT2Tokenizer.from_pretrained("gpt2")
 model = GPT2LMHeadModel.from_pretrained("gpt2")
 model.eval()
 
+# / get method
+@app.route("/", methods=["GET"])
+def home():
+    return jsonify({"message": "Welcome to the Legal Document Generator API. Use POST /generate with a JSON body containing 'description'."})
+
 @app.route("/generate", methods=["POST"])
 def generate_legal_document():
     data = request.get_json()
