@@ -42,10 +42,10 @@ const UploadDocuments = () => {
         }
 
         const formData = new FormData();
-        fileInputs.forEach((file, index) => {
+        fileInputs.forEach((file) => {
             formData.append('documents', file);
-            formData.append('types', docTypes[index]);
         });
+        formData.append('types', docTypes.toString());
         formData.append('status', status);
         formData.append('case_id', caseId);
         formData.append('user_id', userId);

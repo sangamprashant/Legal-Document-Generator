@@ -26,6 +26,7 @@ function App() {
                   <Route path="/cases/create" element={<CreateCase />} />
                   <Route path="/cases/history" element={<ViewAllCase />} />
                   <Route path="/cases/history/:id" element={<CasePage />} />
+                  <Route path="/documents/generate" element={<CreateTemplatePage />} />
                 </>
                 :
                 <>
@@ -35,7 +36,6 @@ function App() {
                 </>
               }
               <Route path="/documents/upload" element={<UploadDocuments />} />
-              <Route path="/documents/generate" element={<CreateTemplatePage />} />
               <Route path="/cases/search" element={<SearchCase />} />
               <Route path="/settings" element={<SettingPage />} />
               <Route path="*" element={<NotFound />} />

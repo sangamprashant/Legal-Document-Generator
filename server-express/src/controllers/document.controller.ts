@@ -4,19 +4,47 @@ import { DocumentService } from "../services/document.service";
 export const DocumentController = {
   async upload(req: Request, res: Response) {
     try {
-      const { user_id, case_id ,status} = req.body;
+      let { user_id, case_id, status, types } = req.body;
       const files = req.files as Express.Multer.File[];
-      const types = req.body['types'];
 
-    if (!user_id || !case_id || !files || !types || files.length !== types.length) {
-      return res.status(400).json({ message: "Missing or mismatched files/types." });
-    }
+      // Parse types if it's sent as JSON string or comma separated string
+      if (typeof types === "string") {
+        try {
+          types = JSON.parse(types); // Expecting '["pdf","doc"]' style
+        } catch {
+          types = types.split(",").map((t: string) => t.trim()); // fallback
+        }
+      }
 
-      const saved = await DocumentService.uploadDocuments(files, types, Number(user_id), Number(case_id), status);
-      res.status(200).json({ message: "Documents uploaded successfully.", saved });
-    } catch (error: any) {
-      console.error('Upload error:', error);
-      res.status(500).json({ message: error.message || 'Something went wrong during upload.' });
+      if (!user_id || !case_id || !files?.length || !types?.length) {
+        return res
+          .status(400)
+          .json({ message: "Missing or mismatched files/types." });
+      }
+
+      console.log({
+        fileLength: files.length,
+        typeLength: types.length,
+      });
+
+      const saved = await DocumentService.uploadDocuments(
+        files,
+        types,
+        Number(user_id),
+        Number(case_id),
+        status
+      );
+
+      res
+        .status(200)
+        .json({ message: "Documents uploaded successfully.", saved });
+    } catch (error:any) {
+      console.error("Upload error:", error);
+      res
+        .status(500)
+        .json({
+          message: error.message || "Something went wrong during upload.",
+        });
     }
   },
 
@@ -30,7 +58,7 @@ export const DocumentController = {
         type,
         status,
         case_id,
-        file_path: file ? file.path : undefined
+        file_path: file ? file.path : undefined,
       });
 
       res.json({ message: "Document updated", result });
@@ -44,7 +72,7 @@ export const DocumentController = {
       const { user_id } = req.params;
       const documents = await DocumentService.getUserDocuments(+user_id);
       res.json(documents);
-    } catch (error:any) {
+        } catch (error:any) {
       res.status(500).json({ error: error.message });
     }
   },
@@ -58,10 +86,13 @@ export const DocumentController = {
         return res.status(400).json({ message: "Status is required." });
       }
 
-      const result = await DocumentService.updateDocumentStatus(+doc_id, status);
+      const result = await DocumentService.updateDocumentStatus(
+        +doc_id,
+        status
+      );
       res.json({ message: "Document status updated", result });
-    } catch (error:any) {
+     } catch (error:any) {
       res.status(500).json({ error: error.message });
     }
-  }
+  },
 };

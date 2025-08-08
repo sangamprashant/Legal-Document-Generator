@@ -67,10 +67,12 @@ const CaseIDHandle = ({ id }: { id: string }) => {
                 <div className="flex justify-between items-center">
                     <h3 className="text-lg font-semibold text-gray-700 mb-4">Documents</h3>
                     <div className="flex items-center gap-2 text-gray-500">
-                        <Link to={`/documents/generate?case_id=${caseData.case_id}`} className="text-blue-600 flex items-center gap-1">
-                            <RiAiGenerateText className="inline-block" /><span className="hidden md:block">Generate Document</span>
-                        </Link>
-                        <RxDividerVertical fontSize={30} className="text-blue-500" />
+                        {user?.role === "advocate" && <>
+                            <Link to={`/documents/generate?case_id=${caseData.case_id}`} className="text-blue-600 flex items-center gap-1">
+                                <RiAiGenerateText className="inline-block" /><span className="hidden md:block">Generate Document</span>
+                            </Link>
+                            <RxDividerVertical fontSize={30} className="text-blue-500" />
+                        </>}
                         <Link to={`/documents/upload?case_id=${caseData.case_id}${user?.role === "advocate" ? `&user_id=${caseData.user.user_id}` : ""} `} className="text-blue-600 flex items-center gap-1">
                             <IoCloudUploadOutline className="inline-block" /> <span className="hidden md:block">Upload Document</span>
                         </Link>
@@ -81,7 +83,7 @@ const CaseIDHandle = ({ id }: { id: string }) => {
                     <p className="text-gray-500">No documents available.</p>
                 ) : (
                     <ul className="space-y-4">
-                        {caseData.documents.map((doc) => (
+                        {caseData.documents.reverse().map((doc) => (
                             <DocumentItem key={doc.doc_id} data={doc} />
                         ))}
                     </ul>
