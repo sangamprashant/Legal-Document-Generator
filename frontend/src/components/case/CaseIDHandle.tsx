@@ -48,7 +48,7 @@ const CaseIDHandle = ({ id }: { id: string }) => {
     if (!caseData) return <p className="text-gray-500 text-center mt-4">No data found.</p>;
 
     return (
-        <div className="max-w-5xl mx-auto px-4 py-6 space-y-6">
+        <div className="max-w-7xl mx-auto px-4 py-6 space-y-6">
             <h2 className="text-2xl font-bold text-gray-800">
                 📁 Case ID: <span className="text-blue-600">{caseData.case_id}</span>
             </h2>
@@ -73,7 +73,7 @@ const CaseIDHandle = ({ id }: { id: string }) => {
                             </Link>
                             <RxDividerVertical fontSize={30} className="text-blue-500" />
                         </>}
-                        <Link to={`/documents/upload?case_id=${caseData.case_id}${user?.role === "advocate" ? `&user_id=${caseData.user.user_id}` : ""} `} className="text-blue-600 flex items-center gap-1">
+                        <Link to={`/documents/upload?case_id=${caseData.case_id}&user_id=${caseData.user.user_id}`} className="text-blue-600 flex items-center gap-1">
                             <IoCloudUploadOutline className="inline-block" /> <span className="hidden md:block">Upload Document</span>
                         </Link>
 

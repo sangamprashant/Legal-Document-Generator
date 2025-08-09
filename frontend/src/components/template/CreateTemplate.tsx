@@ -2,19 +2,23 @@ import * as htmlToImage from 'html-to-image';
 import JoditEditor from "jodit-react";
 import jsPDF from "jspdf";
 import { useEffect, useRef, useState } from "react";
-import { FaRegEye } from "react-icons/fa";
+import { FaAngleRight, FaRegEye } from "react-icons/fa";
 import { IoCloudUploadOutline } from "react-icons/io5";
 import { toast } from "react-toastify";
 import { useAuth } from "../../providers/AuthenticationContext";
 import { apiRequest } from "../../utilities/apiRequest";
 import { generateRandom10DigitNumber, IndianStates, indianStates } from "./states";
 import { server } from '../../utilities';
+import { FaAngleDown } from "react-icons/fa";
+import { useNavigate } from 'react-router-dom';
+
 
 const CreateTemplate = ({ case_id }: { case_id: string | undefined | null }) => {
     const [caseId, setCaseId] = useState<string>(case_id || "");
     const [inputCaseId, setInputCaseId] = useState<string>("");
     const [caseData, setCaseData] = useState<any>(null);
     const { token } = useAuth();
+    const navigate = useNavigate()
     // geenerater document 
     const [generating, setGenerating] = useState(false);
     const [openGenerator, setOpenGenerator] = useState(false);
@@ -25,6 +29,8 @@ const CreateTemplate = ({ case_id }: { case_id: string | undefined | null }) => 
     const [note, setNote] = useState("10")
     const [state, setState] = useState<IndianStates>("Uttar Pradesh")
     const [noteId, setNoteId] = useState("")
+    // ui
+    const [showSummary, setShowSummary] = useState(true)
 
     useEffect(() => {
         if (caseId && token) {
@@ -45,12 +51,12 @@ const CreateTemplate = ({ case_id }: { case_id: string | undefined | null }) => 
     useEffect(() => {
         if (caseData) {
             const { case_from, case_to, description } = caseData;
-            const prompt = `Draft a formal legal document for a case with the following details:
+            const prompt = `This legal document is an agreement for the following matter: :
         - Case From: ${case_from}
         - Case To: ${case_to}
-        - Case Description: ${description}
+        - Case Description: ${description}.
 
-Please write this document in a professional tone suitable for legal purposes.`;
+The terms and conditions are as follows:\n`;
 
             setPrompt(prompt.trim());
         }
@@ -85,49 +91,59 @@ Please write this document in a professional tone suitable for legal purposes.`;
 
             {caseData && (
                 <div className="bg-white p-6 rounded shadow-md">
-                    <h2 className="text-2xl font-semibold text-gray-800 mb-4">
-                        Case Summary
-                    </h2>
-                    <div className="space-y-3">
-                        <div>
-                            <span className="font-semibold text-gray-700">Case ID:</span>{" "}
-                            {caseData.case_id}
-                        </div>
-                        <div>
-                            <span className="font-semibold text-gray-700">Status:</span>{" "}
-                            <span
-                                className={`px-2 py-1 rounded text-sm ${caseData.status === "Resolved"
-                                    ? "bg-green-100 text-green-700"
-                                    : "bg-yellow-100 text-yellow-700"
-                                    }`}
-                            >
-                                {caseData.status}
-                            </span>
-                        </div>
-                        <div>
-                            <span className="font-semibold text-gray-700">User ID:</span>{" "}
-                            {caseData.user_id}
-                        </div>
-                        <div>
-                            <span className="font-semibold text-gray-700">From:</span>{" "}
-                            {caseData.case_from}
-                        </div>
-                        <div>
-                            <span className="font-semibold text-gray-700">To:</span>{" "}
-                            {caseData.case_to}
-                        </div>
-                        <div>
-                            <span className="font-semibold text-gray-700">Description:</span>{" "}
-                            <span className="text-gray-800">{caseData.description}</span>
-                        </div>
+
+                    <div className={`flex items-center gap-2 ${showSummary && "mb-4"}`}>
+                        <button className='border rounded-full' onClick={() => { setShowSummary(pre => !pre) }}>
+                            {showSummary ? <FaAngleDown fontSize={20} /> : <FaAngleRight fontSize={20} />}
+                        </button>
+                        <h2 className="text-2xl font-semibold text-gray-800">
+                            Case Summary
+                        </h2>
                     </div>
 
-                    <button
-                        onClick={() => setOpenGenerator(true)}
-                        className="mt-6 w-full bg-green-600 hover:bg-green-700 text-white py-2 rounded text-lg font-medium"
-                    >
-                        Generate Document
-                    </button>
+
+                    {showSummary && <>
+                        <div className="space-y-3">
+                            <div>
+                                <span className="font-semibold text-gray-700">Case ID:</span>{" "}
+                                {caseData.case_id}
+                            </div>
+                            <div>
+                                <span className="font-semibold text-gray-700">Status:</span>{" "}
+                                <span
+                                    className={`px-2 py-1 rounded text-sm ${caseData.status === "Resolved"
+                                        ? "bg-green-100 text-green-700"
+                                        : "bg-yellow-100 text-yellow-700"
+                                        }`}
+                                >
+                                    {caseData.status}
+                                </span>
+                            </div>
+                            <div>
+                                <span className="font-semibold text-gray-700">User ID:</span>{" "}
+                                {caseData.user_id}
+                            </div>
+                            <div>
+                                <span className="font-semibold text-gray-700">From:</span>{" "}
+                                {caseData.case_from}
+                            </div>
+                            <div>
+                                <span className="font-semibold text-gray-700">To:</span>{" "}
+                                {caseData.case_to}
+                            </div>
+                            <div>
+                                <span className="font-semibold text-gray-700">Description:</span>{" "}
+                                <span className="text-gray-800">{caseData.description}</span>
+                            </div>
+                        </div>
+
+                        <button
+                            onClick={() => setOpenGenerator(true)}
+                            className="mt-6 w-full bg-green-600 hover:bg-green-700 text-white py-2 rounded text-lg font-medium"
+                        >
+                            Generate Document
+                        </button>
+                    </>}
                 </div>
             )}
 
@@ -140,7 +156,7 @@ Please write this document in a professional tone suitable for legal purposes.`;
                         <label htmlFor="prompt">Default Prompt</label>
                         <textarea
                             id="prompt"
-                            rows={4}
+                            rows={7}
                             className="w-full border px-3 py-2 rounded mb-4"
                             value={prompt}
                             onChange={(e) => setPrompt(e.target.value)}
@@ -218,7 +234,7 @@ Please write this document in a professional tone suitable for legal purposes.`;
                                         <p>{noteId}</p>
                                     </div>
                                     <div
-                                        className="prose max-w-full rounded bg-gray-50"
+                                        className="prose max-w-full"
                                         dangerouslySetInnerHTML={{ __html: editorContent }}
                                     />
                                 </div>
@@ -274,7 +290,8 @@ Please write this document in a professional tone suitable for legal purposes.`;
                 body: formData,
             });
 
-            console.log("Uploaded successfully");
+            toast.success("Uploaded successfully");
+            navigate(`/cases/history/${caseId}`)
         } catch (error) {
             console.error("Upload failed:", error);
         }
@@ -295,6 +312,7 @@ Please write this document in a professional tone suitable for legal purposes.`;
 
             setEditorContent(`<pre>${res.result || ""}</pre>`);
             setOpenGenerator(false)
+            setShowSummary(false)
 
         } catch (error) {
             const message = error instanceof Error ? error.message : "Something went wrong";

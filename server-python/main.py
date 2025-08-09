@@ -22,7 +22,7 @@ def generate_legal_document():
     if not description:
         return jsonify({"result": "⚠️ Please enter a brief description."})
 
-    prompt = f"This legal document is an agreement for the following matter: {description}. The terms and conditions are as follows:\n"
+    prompt = f"{description}"
     input_ids = tokenizer.encode(prompt, return_tensors='pt')
 
     with torch.no_grad():

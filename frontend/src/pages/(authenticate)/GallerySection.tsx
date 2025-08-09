@@ -17,20 +17,6 @@ const GallerySection: React.FC = () => {
                     <div className="absolute inset-0 bg-black/50 flex flex-col justify-center items-center text-white text-center px-6">
                         <h2 className="text-3xl font-bold mb-2">Smart Legal Templates</h2>
                         <p className="text-lg mb-4">Generate error-free legal documents in seconds with our AI-powered solution.</p>
-                        <a className="inline-flex items-center text-indigo-400 hover:underline cursor-pointer">
-                            Learn More
-                            <svg
-                                fill="none"
-                                stroke="currentColor"
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                                strokeWidth={2}
-                                className="w-4 h-4 ml-2"
-                                viewBox="0 0 24 24"
-                            >
-                                <path d="M5 12h14M12 5l7 7-7 7" />
-                            </svg>
-                        </a>
                     </div>
                 </div>
 
@@ -58,20 +44,6 @@ const GallerySection: React.FC = () => {
                                 <div className="absolute inset-0 bg-black/40 flex flex-col justify-center items-center text-white text-center px-5">
                                     <h3 className="text-2xl font-semibold mb-2">{title}</h3>
                                     <p className="mb-3">{description}</p>
-                                    <a className="inline-flex items-center text-indigo-300 hover:underline cursor-pointer">
-                                        Learn More
-                                        <svg
-                                            fill="none"
-                                            stroke="currentColor"
-                                            strokeLinecap="round"
-                                            strokeLinejoin="round"
-                                            strokeWidth={2}
-                                            className="w-4 h-4 ml-2"
-                                            viewBox="0 0 24 24"
-                                        >
-                                            <path d="M5 12h14M12 5l7 7-7 7" />
-                                        </svg>
-                                    </a>
                                 </div>
                             </div>
                         );

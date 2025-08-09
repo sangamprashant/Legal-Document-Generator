@@ -7,7 +7,7 @@ const JWT_SECRET = process.env.JWT_SECRET || "your_secret_key";
 const generateAuthResponse = (user: any) => {
   const token = jwt.sign(
     { id: user.id, email: user.email, role: user.role },
-    JWT_SECRET,
+    JWT_SECRET
   );
 
   return {
@@ -36,5 +36,22 @@ export const AuthService = {
     if (!isMatch) throw new Error("Invalid credentials");
 
     return generateAuthResponse(user);
+  },
+
+  changeEmail: async (userId: number, newEmail: string) => {
+    return await UserRepository.updateEmail(userId, newEmail);
+  },
+
+  changePassword: async (
+    userId: number,
+    currentPassword: string,
+    newPassword: string
+  ) => {
+    const user = await UserRepository.getUserById(userId);
+    if (!user) throw new Error("User not found");
+
+    const isMatch = currentPassword === user.password;
+    if (!isMatch) throw new Error("Current password is incorrect");
+    return await UserRepository.updatePassword(userId, newPassword);
   },
 };

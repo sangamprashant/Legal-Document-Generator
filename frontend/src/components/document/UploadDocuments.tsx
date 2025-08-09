@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { useAuth } from '../../providers/AuthenticationContext';
 import { server } from '../../utilities';
-import PageHeader from '../banner/PageHeader';
 import { documentTypesWithCategory } from '../../utilities/documentType';
+import PageHeader from '../banner/PageHeader';
 
 const UploadDocuments = () => {
     const [fileInputs, setFileInputs] = useState<File[]>([]);
@@ -12,6 +13,10 @@ const UploadDocuments = () => {
     const [caseId, setCaseId] = useState('');
     const [userId, setUserId] = useState('');
     const { user, token } = useAuth();
+
+    const [searchParams] = useSearchParams();
+    const case_id = searchParams.get("case_id");
+    const user_id = searchParams.get("user_id")
 
     const handleFileChange = (index: number, file: File | null) => {
         const updatedFiles = [...fileInputs];
@@ -40,6 +45,12 @@ const UploadDocuments = () => {
             alert('Please fill in all required fields.');
             return;
         }
+
+        docTypes.forEach((d, i) => {
+            if (!d || d.trim() === "") {
+                throw new Error(`Error: types -[${i + 1}] is empty.`);
+            }
+        });
 
         const formData = new FormData();
         fileInputs.forEach((file) => {
@@ -79,6 +90,18 @@ const UploadDocuments = () => {
         }
     }, [user]);
 
+
+    useEffect(() => {
+        if (typeof case_id === "string")
+            setCaseId(case_id)
+        else setCaseId("")
+
+        if (typeof user_id === "string")
+            setUserId(user_id)
+        else setUserId("")
+
+    }, [case_id, user_id])
+
     return (
         <>
             <PageHeader title="Upload supporting documents for the case" />
@@ -92,6 +115,7 @@ const UploadDocuments = () => {
                             onChange={(e) => setCaseId(e.target.value)}
                             className="w-full border px-3 py-2 rounded"
                             required
+                            disabled={typeof case_id === "string"}
                         />
                     </div>
 
@@ -105,6 +129,7 @@ const UploadDocuments = () => {
                                     onChange={(e) => setUserId(e.target.value)}
                                     className="w-full border px-3 py-2 rounded"
                                     required
+                                    disabled={typeof user_id === "string"}
                                 />
                             </div>
 

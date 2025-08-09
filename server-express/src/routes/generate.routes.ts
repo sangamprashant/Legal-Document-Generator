@@ -1,9 +1,6 @@
 import fs from "fs";
-// routes/documents.ts
 import express, { Request, Response } from "express";
 import { generateResult } from "../utils/pythonServerConnect";
-import multer from "multer";
-import PDFDocument from "pdfkit";
 import { upload } from "../middlewares/upload";
 import { DocumentRepository } from "../repositories/document.repository";
 

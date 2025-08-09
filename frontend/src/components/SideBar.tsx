@@ -15,7 +15,6 @@ import SideLinks from "./sidebar/SideLinks";
 import Title from "./sidebar/Title";
 import Topbar from "./sidebar/Topbar";
 
-
 interface SideBarProps {
     children: React.ReactNode;
 }
@@ -26,9 +25,9 @@ const advocateLinks: MainLink[] = [
         title: "Cases",
         icon: <GoLaw size={22} />,
         subLinks: [
-            { title: "Create Case", link: "/cases/create" },
-            { title: "Search Cases", link: "/cases/search" },
             { title: "Case History", link: "/cases/history" },
+            { title: "Search Cases", link: "/cases/search" },
+            { title: "Create Case", link: "/cases/create" },
         ],
     },
     {
@@ -47,9 +46,9 @@ const userLinks: MainLink[] = [
         title: "Cases",
         icon: <GoLaw size={22} />,
         subLinks: [
-            { title: "Search Cases", link: "/cases/search" },
             { title: "My Cases", link: "/cases" },
             { title: "Create Case", link: "/cases/create" },
+            { title: "Search Cases", link: "/cases/search" },
         ],
     },
     {
