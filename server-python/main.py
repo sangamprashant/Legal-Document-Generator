@@ -41,4 +41,4 @@ def generate_legal_document():
     return jsonify({"result": result})
 
 if __name__ == "__main__":
-    app.run(debug=True, port=8000)
+    app.run(debug=False, port=8000)
